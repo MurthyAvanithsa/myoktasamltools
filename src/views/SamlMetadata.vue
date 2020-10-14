@@ -8,39 +8,21 @@
         <b-card-body>
           <form>
             <base-input label="Email address" placeholder="name@example.com" />
-
-            <base-input label="Example select">
-              <select class="form-control">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-              </select>
-            </base-input>
-
-            <base-input label="Example multiple select">
-              <select multiple="" class="form-control">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-              </select>
-            </base-input>
-
-            <base-input label="Example textarea">
+            <base-input label="Past SAML metadata here">
               <textarea
                 class="form-control"
                 id="exampleFormControlTextarea3"
                 rows="3"
               ></textarea>
             </base-input>
+            <div class="text-left">
+              <base-button type="primary" native-type="submit" class="my-4">Process XML</base-button
+              >
+            </div>
           </form>
         </b-card-body>
       </b-row>
       <div class="mt-5"></div>
-     
     </b-container>
   </div>
 </template>
@@ -56,6 +38,7 @@ import projects from "./Tables/projects";
 import users from "./Tables/users";
 import LightTable from "./Tables/RegularTables/LightTable";
 import DarkTable from "./Tables/RegularTables/DarkTable";
+import parser from "fast-xml-parser";
 
 export default {
   components: {
@@ -68,10 +51,7 @@ export default {
     [TableColumn.name]: TableColumn,
   },
   data() {
-    return {
-      projects,
-      users,
-    };
+    return {};
   },
 };
 </script>
