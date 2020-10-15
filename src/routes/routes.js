@@ -28,9 +28,9 @@ const routes = [
         component: () => import(/* webpackChunkName: "demo" */ '../views/SamlCert.vue')
       },
       {
-        path: '/icons',
+        path: '/base64',
         name: 'icons',
-        component: () => import(/* webpackChunkName: "demo" */ '../views/Icons.vue')
+        component: () => import(/* webpackChunkName: "demo" */ '../views/Base64.vue')
       },
       {
         path: '/profile',

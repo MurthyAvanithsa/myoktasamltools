@@ -27,6 +27,23 @@
           >
           </sidebar-item>
         </sidebar-item>
+        <sidebar-item
+          :link="{
+            name: 'Encode/Decode Tools',
+            icon: 'ni ni-settings text-primary',
+          }"
+        >
+          <sidebar-item
+            :link="{
+              name: 'Base 64',
+              path: '/base64',
+              icon: 'ni ni-settings text-primary',
+            }"
+          >
+          </sidebar-item>
+        
+          </sidebar-item>
+        </sidebar-item>
       </template>
 
       <template slot="links-after">
