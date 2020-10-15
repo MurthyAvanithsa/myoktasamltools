@@ -1,28 +1,36 @@
 <template>
   <div>
-    <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-gradient-success">
+    <base-header class="mb-6 pb-8 pt-5 pt-md-8 bg-gradient-success">
       <!-- Card stats -->
     </base-header>
-    <b-container fluid class="mt--7">
+    <b-container
+      fluid
+      class="mt--7">
       <b-row>
         <b-card-body>
           <form>
-            <base-input label="Email address" placeholder="name@example.com" />
-            <base-input label="Past SAML metadata here">
+            <base-input label="Paste SAML metadata here">
               <textarea
-                class="form-control"
                 id="exampleFormControlTextarea3"
+                class="form-control"
                 rows="3"
-              ></textarea>
+                v-model="samlText"
+              />
             </base-input>
             <div class="text-left">
-              <base-button type="primary" native-type="submit" class="my-4">Process XML</base-button
+              <base-button
+                v-on:click="parseXML"
+                type="primary" 
+                native-type="submit" 
+                class="my-4"
               >
+                Process XML
+              </base-button>
             </div>
           </form>
         </b-card-body>
       </b-row>
-      <div class="mt-5"></div>
+      <div class="mt-5" />
     </b-container>
   </div>
 </template>
@@ -34,16 +42,11 @@ import {
   Table,
   TableColumn,
 } from "element-ui";
-import projects from "./Tables/projects";
-import users from "./Tables/users";
-import LightTable from "./Tables/RegularTables/LightTable";
-import DarkTable from "./Tables/RegularTables/DarkTable";
-import parser from "fast-xml-parser";
-
+import {
+  parseMetaData
+} from "../util/sAMLUtil"
 export default {
   components: {
-    LightTable,
-    DarkTable,
     [Dropdown.name]: Dropdown,
     [DropdownItem.name]: DropdownItem,
     [DropdownMenu.name]: DropdownMenu,
@@ -51,8 +54,15 @@ export default {
     [TableColumn.name]: TableColumn,
   },
   data() {
-    return {};
+    return {
+      samlText: ""
+    };
   },
+  methods: {
+    parseXML() {
+      console.log(parseMetaData(this.samlText))
+    }
+  }
 };
 </script>
 <style>

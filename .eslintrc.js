@@ -1,22 +1,24 @@
 module.exports = {
-  extends: [
-     'plugin:vue/recommended'
-  ],
-
-  rules: {
-    // override/add rules settings here, such as:
-    'vue/no-unused-vars': 'error'
+  root: true,
+  env: {
+    // this section will be used to determine which APIs are available to us
+    // (i.e are we running in a browser environment or a node.js env)
+    node: true,
+    browser: true
   },
-
-  overrides: [
-    {
-      files: [
-        '**/__tests__/*.{j,t}s?(x)',
-        '**/tests/unit/**/*.spec.{j,t}s?(x)'
-      ],
-      env: {
-        jest: true
-      }
-    }
-  ]
-}
+  parserOptions: {
+    parser: "babel-eslint",
+    // specifying a module sourcetype prevent eslint from marking import statements as errors
+    sourceType: "module"
+  },
+  extends: [
+    // use the recommended rule set for both plain javascript and vue
+    "eslint:recommended",
+    "plugin:vue/recommended"
+  ],
+  rules: {
+    // we should always disable console logs and debugging in production
+    "no-console": process.env.NODE_ENV === "production" ? "error" : "off",
+    "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off"
+  }
+};
