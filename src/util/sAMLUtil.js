@@ -6,7 +6,7 @@ function parseMetaData(samlMetaData) {
         ignoreAttributes: false,
         ignoreNameSpace: true
     }
-    var idpMetaData = {};
+    var metaDataOptions = {};
 
 
     //TODO: double check if we need to dynamically change the name space --Venu
@@ -19,10 +19,16 @@ function parseMetaData(samlMetaData) {
     const metaDataObj = xmlParser.parse(samlMetaData, options);
 
     if (DESCRIPTOR_TYPE_SP in metaDataObj.EntityDescriptor) {
-        idpMetaData = { ...idpMetaData, "metaType": "SP" }
-
+        metaDataOptions = { ...metaDataOptions, "metaType": "SP" }
+        const assertionConsumerURL = metaDataObj.EntityDescriptor.SPSSODescriptor.AssertionConsumerService.attr_Location;
+        metaDataOptions = {
+            ...metaDataOptions,
+            "SPOptions": {
+                "assertionConsumerSrv": assertionConsumerURL,
+            }
+        }
     } else if (DESCRIPTOR_TYPE_IDP in metaDataObj.EntityDescriptor) {
-        idpMetaData = { ...idpMetaData, "metaType": "IDP" }
+        metaDataOptions = { ...metaDataOptions, "metaType": "IDP" }
         const audienceUrl = metaDataObj.EntityDescriptor.attr_entityID;
 
         // SAML REDIRECT URL and POST URL
@@ -30,8 +36,8 @@ function parseMetaData(samlMetaData) {
         const postUrl = samlBindings.filter(binding => binding.attr_Binding == BINDING_HTTP_POST).map(binding => binding.attr_Location);
         const redirectUrl = samlBindings.filter(binding => binding.attr_Binding == BINDING_HTTP_REDIRECT).map(binding => binding.attr_Location);
 
-        idpMetaData = {
-            ...idpMetaData,
+        metaDataOptions = {
+            ...metaDataOptions,
             "IDPOptions": {
                 "audienceUrl": audienceUrl,
                 "postUrl": postUrl.length > 0 ? postUrl[0] : null,
@@ -42,6 +48,6 @@ function parseMetaData(samlMetaData) {
     // Process if DESCRIPTOR_TYPE_IDP
     // Audience URI
 
-    return idpMetaData;
+    return metaDataOptions;
 }
 export { parseMetaData };

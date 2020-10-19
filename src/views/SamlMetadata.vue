@@ -3,8 +3,8 @@
     <base-header class="mb-6 pb-8 pt-5 pt-md-8 bg-gradient-success">
       <!-- Card stats -->
     </base-header>
-    <b-container
-      fluid
+    <b-container 
+      fluid 
       class="mt--7">
       <b-row>
         <b-card-body>
@@ -12,17 +12,17 @@
             <base-input label="Paste SAML metadata here">
               <textarea
                 id="exampleFormControlTextarea3"
+                v-model="samlText"
                 class="form-control"
                 rows="3"
-                v-model="samlText"
               />
             </base-input>
             <div class="text-left">
               <base-button
-                v-on:click="parseXML"
-                type="primary" 
-                native-type="submit" 
+                type="primary"
+                native-type="submit"
                 class="my-4"
+                @click="parseXML(samlText)"
               >
                 Process XML
               </base-button>
@@ -42,9 +42,7 @@ import {
   Table,
   TableColumn,
 } from "element-ui";
-import {
-  parseMetaData
-} from "../util/SAMLUtil"
+import { parseMetaData } from "../util/SAMLUtil";
 export default {
   components: {
     [Dropdown.name]: Dropdown,
@@ -55,14 +53,14 @@ export default {
   },
   data() {
     return {
-      samlText: ""
+      samlText: "",
     };
   },
   methods: {
-    parseXML() {
-      console.log(parseMetaData(this.samlText))
-    }
-  }
+    parseXML(samlText) {
+      console.log(parseMetaData(samlText));
+    },
+  },
 };
 </script>
 <style>
