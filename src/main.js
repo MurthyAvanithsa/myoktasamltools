@@ -17,11 +17,13 @@
 import Vue from 'vue';
 import DashboardPlugin from './plugins/dashboard-plugin';
 import App from './App.vue';
+import VueClipboard from 'vue-clipboard2'
 
 // router setup
 import router from './routes/router';
 // plugin setup
 Vue.use(DashboardPlugin);
+Vue.use(VueClipboard);
 
 /* eslint-disable no-new */
 new Vue({

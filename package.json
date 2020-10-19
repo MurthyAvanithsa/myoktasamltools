@@ -2,7 +2,6 @@
   "name": "bootstrap-vue-argon-dashboard",
   "version": "1.0.0",
   "private": true,
- 
   "scripts": {
     "serve": "vue-cli-service serve --open",
     "build": "vue-cli-service build",
@@ -31,7 +30,7 @@
     "vee-validate": "^3.2.1",
     "vue": "^2.6.11",
     "vue-chartjs": "^3.5.0",
-    "vue-clipboard2": "^0.3.0",
+    "vue-clipboard2": "^0.3.1",
     "vue-flatpickr-component": "^8.1.2",
     "vue-router": "^3.0.6",
     "vue2-transitions": "^0.2.3"
