@@ -44,7 +44,7 @@ import {
 } from "element-ui";
 import {
   parseMetaData
-} from "../util/sAMLUtil"
+} from "../util/SAMLUtil"
 export default {
   components: {
     [Dropdown.name]: Dropdown,

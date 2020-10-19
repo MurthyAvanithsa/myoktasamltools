@@ -1,6 +1,7 @@
-import { parseMetaData } from "../../src/util/sAMLUtil";
+import { parseMetaData } from "../../src/util/SAMLUtil";
+const xmlParser = require('fast-xml-parser');
 
-const samlMetaData = `<?xml version="1.0" encoding="UTF-8"?><md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" ID="cloudfoundry-saml-login" entityID="cloudfoundry-saml-login"><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/><ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><ds:Reference URI="#cloudfoundry-saml-login"><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>XCvHZ7BucFJedFJLxgdI3aH+60o=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue>hTUGGxt0w3hWh8Kx7vtsuhQpw1qicbHMu9sk1+BULVQ3BPSwHDRD0vfers0B96wx+2e1cg3nYsdefpO9g/pJ6bopoDVM19r/kLHiathPqB1N6cHPWMALNv9wLlpVQv/+WTQfxKhy4wbm32s3Fow4os6RKzdW/EmqYuW8LSoH99c=</ds:SignatureValue><ds:KeyInfo><ds:X509Data><ds:X509Certificate>MIIDSTCCArKgAwIBAgIBADANBgkqhkiG9w0BAQQFADB8MQswCQYDVQQGEwJhdzEOMAwGA1UECBMF
+const IDPMetaData = `<?xml version="1.0" encoding="UTF-8"?><md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" ID="cloudfoundry-saml-login" entityID="cloudfoundry-saml-login"><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/><ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><ds:Reference URI="#cloudfoundry-saml-login"><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>XCvHZ7BucFJedFJLxgdI3aH+60o=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue>hTUGGxt0w3hWh8Kx7vtsuhQpw1qicbHMu9sk1+BULVQ3BPSwHDRD0vfers0B96wx+2e1cg3nYsdefpO9g/pJ6bopoDVM19r/kLHiathPqB1N6cHPWMALNv9wLlpVQv/+WTQfxKhy4wbm32s3Fow4os6RKzdW/EmqYuW8LSoH99c=</ds:SignatureValue><ds:KeyInfo><ds:X509Data><ds:X509Certificate>MIIDSTCCArKgAwIBAgIBADANBgkqhkiG9w0BAQQFADB8MQswCQYDVQQGEwJhdzEOMAwGA1UECBMF
 YXJ1YmExDjAMBgNVBAoTBWFydWJhMQ4wDAYDVQQHEwVhcnViYTEOMAwGA1UECxMFYXJ1YmExDjAM
 BgNVBAMTBWFydWJhMR0wGwYJKoZIhvcNAQkBFg5hcnViYUBhcnViYS5hcjAeFw0xNTExMjAyMjI2
 MjdaFw0xNjExMTkyMjI2MjdaMHwxCzAJBgNVBAYTAmF3MQ4wDAYDVQQIEwVhcnViYTEOMAwGA1UE
@@ -44,7 +45,7 @@ MAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEEBQADgYEAYvBJ0HOZbbHClXmGUjGs+GS+xC1FO/am
 2suCSYqNB9dyMXfOWiJ1+TLJk+o/YZt8vuxCKdcZYgl4l/L6PxJ982SRhc83ZW2dkAZI4M0/Ud3o
 ePe84k8jm3A7EvH5wi5hvCkKRpuRBwn3Ei+jCRouxTbzKPsuCVB+1sNyxMTXzf0=</ds:X509Certificate></ds:X509Data></ds:KeyInfo></md:KeyDescriptor><md:NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress</md:NameIDFormat><md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</md:NameIDFormat><md:NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified</md:NameIDFormat><md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="http://localhost:8080/uaa/saml/idp/SSO/alias/cloudfoundry-saml-login"/><md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="http://localhost:8080/uaa/saml/idp/SSO/alias/cloudfoundry-saml-login"/></md:IDPSSODescriptor></md:EntityDescriptor>`;
 
-const oktaSAMLMetadata = `<?xml version="1.0" encoding="UTF-8"?>
+const SPMetadata = `<?xml version="1.0" encoding="UTF-8"?>
 <md:EntityDescriptor entityID="https://www.okta.com/saml2/service-provider/spwjclzdysvwgfxfwfwk" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"><md:SPSSODescriptor AuthnRequestsSigned="false" WantAssertionsSigned="true" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol"><md:KeyDescriptor use="encryption"><ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#"><ds:X509Data><ds:X509Certificate>MIIDpDCCAoygAwIBAgIGAWcjVdkUMA0GCSqGSIb3DQEBCwUAMIGSMQswCQYDVQQGEwJVUzETMBEG
 A1UECAwKQ2FsaWZvcm5pYTEWMBQGA1UEBwwNU2FuIEZyYW5jaXNjbzENMAsGA1UECgwET2t0YTEU
 MBIGA1UECwwLU1NPUHJvdmlkZXIxEzARBgNVBAMMCmRldi0zMDk3OTYxHDAaBgkqhkiG9w0BCQEW
@@ -80,17 +81,27 @@ pg5HR0IBkpIrz+y18qREOcV7RWEKktIfq4JQ9B8pLCR0OctxdAn1P5dzntTQA4pwfj4Vu2M+Elvc
 CWkmRADt/J4mgpCbCHax1YEJgBna5cij</ds:X509Certificate></ds:X509Data></ds:KeyInfo></md:KeyDescriptor><md:NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified</md:NameIDFormat><md:NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress</md:NameIDFormat><md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</md:NameIDFormat><md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</md:NameIDFormat><md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://login.venuoktadomain.info/sso/saml2/0oal7we7gzTY59IAL0h7" index="0" isDefault="true"/><md:AttributeConsumingService index="0"><md:ServiceName xml:lang="en">Tecnics preview</md:ServiceName><md:RequestedAttribute FriendlyName="First Name" Name="firstName" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" isRequired="true"/><md:RequestedAttribute FriendlyName="Last Name" Name="lastName" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" isRequired="true"/><md:RequestedAttribute FriendlyName="Email" Name="email" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" isRequired="true"/><md:RequestedAttribute FriendlyName="Mobile Phone" Name="mobilePhone" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" isRequired="false"/><md:RequestedAttribute FriendlyName="displayName" Name="displayName" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" isRequired="false"/></md:AttributeConsumingService></md:SPSSODescriptor><md:Organization><md:OrganizationName xml:lang="en">venuokta</md:OrganizationName><md:OrganizationDisplayName xml:lang="en">Venu Developer org</md:OrganizationDisplayName><md:OrganizationURL xml:lang="en">https://www.tecnics.com</md:OrganizationURL></md:Organization></md:EntityDescriptor>`
 
 describe('Parse okta options', () => {
+   
+    it('metaType is IDP', () => {
+        const oktaOptions = parseMetaData(IDPMetaData);
+        expect(oktaOptions.metaType).toMatch("IDP");
+    });
+    it('metaType is SP', () => {
+        const oktaOptions = parseMetaData(SPMetadata);
+        expect(oktaOptions.metaType).toMatch("SP");
+    });
+
     it('should return audienceUrl from meta', () => {
-        const oktaOptions = parseMetaData(samlMetaData);
-        expect(oktaOptions.audienceUrl).toMatch("cloudfoundry-saml-login");
-    })
+        const oktaOptions = parseMetaData(IDPMetaData);
+        expect(oktaOptions.IDPOptions.audienceUrl).toMatch("cloudfoundry-saml-login");
+    });
     it('should return postUrl from meta', () => {
-        const oktaOptions = parseMetaData(samlMetaData);
-        expect(oktaOptions.postUrl).toMatch("http://localhost:8080/uaa/saml/idp/SSO/alias/cloudfoundry-saml-login");
-    })
+        const oktaOptions = parseMetaData(IDPMetaData);
+        expect(oktaOptions.IDPOptions.postUrl).toMatch("http://localhost:8080/uaa/saml/idp/SSO/alias/cloudfoundry-saml-login");
+    });
     it('should return redirectUrl from meta', () => {
-        const oktaOptions = parseMetaData(samlMetaData);
-        expect(oktaOptions.redirectUrl).toMatch("http://localhost:8080/uaa/saml/idp/SSO/alias/cloudfoundry-saml-login");
-    })
+        const oktaOptions = parseMetaData(IDPMetaData);
+        expect(oktaOptions.IDPOptions.redirectUrl).toMatch("http://localhost:8080/uaa/saml/idp/SSO/alias/cloudfoundry-saml-login");
+    });
 })
 
